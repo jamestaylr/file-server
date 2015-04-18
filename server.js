@@ -16,7 +16,30 @@ app.use("/", express.static(__dirname + "/public"));
 
 // Setup the index page view
 app.get('/', function(req, res) {
-    res.render('main');
+    res.redirect('/content');
+});
+
+app.get('/content/*', function(req, res) {
+    var dir = './public' +  req.url;
+
+    try {
+        var files = fs.readdirSync(dir);
+        
+        for(var i = 0; i < files.length; i++) {
+            var stat = fs.statSync(dir + files[i]);
+
+            files[i] = {'name': files[i], 'properties': stat};
+        }
+
+        console.log(files);
+    } catch(e)
+    {
+        var files = {};
+
+    }
+
+    res.render('main', {'files': files, 'location': req.url.split('/').slice(2)});
+
 });
 
 // Defines error handling

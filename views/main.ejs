@@ -2,10 +2,24 @@
 <html>
 <head>
 	<title>File Server</title>
-	<link href="resources/reset.css" rel="stylesheet" type="text/css">
-	<link href="resources/style.css" rel="stylesheet" type="text/css">
+	<link href="/resources/reset.css" rel="stylesheet" type="text/css">
+	<link href="/resources/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-	<h1></h1>
+	<h1>
+		<% for(var i=0; i < location.length; i++) { %>
+			 <%= location[i] + ' >' %> 
+		<% } %>
+
+	</h1>
+	<table>
+	<% for(var i=0; i < files.length; i++) { %>
+	   <tr>
+	     <td><%= files[i].name %></td>
+	     <td><%= files[i].properties.size %></td>
+	     <td><%= files[i].properties.size %></td>
+	   </tr>
+	<% } %>
+	</table>
 </body>
 </html>
