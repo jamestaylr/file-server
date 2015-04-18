@@ -10,7 +10,9 @@ var port = 8080;
 // Create Express and set up the EJS view engine
 var app = express();
 app.set('view engine', 'ejs');
-app.use("/content", express.static(__dirname + "/content"));
+
+// Mount the public directory at the root of the web server
+app.use("/", express.static(__dirname + "/public"));
 
 // Setup the index page view
 app.get('/', function(req, res) {
