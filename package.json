@@ -1,0 +1,13 @@
+{
+  "name": "wd-file-server",
+  "version" : "0.0.1",
+  "main": "server.js",
+  "dependencies": {
+    "ejs": "2.3.1",
+    "express": "4.12.2",
+  },
+  "repository" : {
+  	"type" : "git",
+    "url" : "https://github.com/jamestaylr/wd-file-server.git"
+  }
+}
