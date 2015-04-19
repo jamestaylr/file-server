@@ -4,7 +4,9 @@ var fs = require("fs");
 
 // Dependency Library Imports
 var express = require('express');
-var multer = require('multer')
+var multer = require('multer');
+var bodyParser = require("body-parser");
+var mkdirp = require('mkdirp');
 
 // Defines the port the server will run on
 var port = 8080;
@@ -15,6 +17,10 @@ app.set('view engine', 'ejs');
 
 // Mount the public directory at the root of the web server
 app.use("/", express.static(__dirname + "/public"));
+app.use(bodyParser.json()); // Configures bodyParser to accept JSON
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 
 // Setup the index page view
 app.get('/', function(req, res) {
@@ -56,7 +62,6 @@ app.use(multer({
         return dest;
     },
     rename: function(fieldname, filename) {
-        console.log(filename);
         return filename;
     }
 }));
@@ -66,6 +71,12 @@ function sendResponse(req, res) {
     res.send(200);
 };
 
+app.post('/create', function(req, res) {
+    mkdirp('./public/content/' + req.headers.referer.split('/').slice(4).join().replace(/,/g, '/') + req.body.folder, function(err) {
+        if (err) console.error(err)
+    });
+    res.send(200);
+});
 
 // Defines error handling
 app.use(function(req, res, next) {
