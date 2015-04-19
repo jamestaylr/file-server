@@ -6,39 +6,47 @@
         <link href="/resources/style.css" rel="stylesheet" type="text/css">
     </head>
     <body>
-        <h1>
-            > 
-            <% for(var i=0; i < location.length; i++) { %>
-            <% if(!(location[i].length < 1)) {%>
-                <%= location[i] + ' >' %> 
-            <% }%>
-
-            <% } %>
-        </h1>
-
-        <% if(files.length < 1) {%>
-            <%= 'There doesn\'t appear to be anything in this folder!' %> 
-        <% } else {%>
-        <table>
-            <tr>
-                <th></th>
-                <th>File name</th>
-                <th>File size</th>
-                <th>Last modified</th>
-            </tr>
-            <% for(var i=0; i < files.length; i++) { %>
-            <tr>
-                <% if(files[i].properties.nlink == 2) {%>
-                    <td class="folder"></td><td><a class="folder" href="<%= location.join() + files[i].name %>"><%= files[i].name %></a></td><td></td><td><%= formatDate(files[i].properties.mtime) %></td>
-                <% } else { %>
+        <main>
+            <h1>
+                <a href="/content/"><div class="drive-icon"></div></a>
+                > 
+                <% var a = location.split('/'); for(var i=0; i < a.length-1; i++) { %>
+                    <a href="<%='/content/' + a.slice(0, i+1).join().replace(/,/g, '/');%>"><%= a[i] %></a> >
+                <% } %>
+            </h1>
+            <% if(files.length < 1) {%>
+                <div class="message">
+                    <%= 'There doesn\'t appear to be anything in this folder!' %>
+                </div>
+            <% } else {%>
+            <table>
+                <tr>
+                    <th></th>
+                    <th>File name</th>
+                    <th>File size</th>
+                    <th>Last modified</th>
+                </tr>
+                <% for(var i=0; i < files.length; i++) { %>
+                <tr>
+                    <% if(files[i].properties.nlink > 1) {%>
+                    <td>
+                        <div class="folder-icon"></div>
+                    </td>
+                    <td><a class="folder" href="<%= '/content/' + location + files[i].name %>"><%= files[i].name %></a></td>
                     <td></td>
-                    <td><a href="<%= location.join() + files[i].name %>"><%= files[i].name %></a></td>
+                    <td><%= formatDate(files[i].properties.mtime) %></td>
+                    <% } else { %>
+                    <td>
+                        <div class="file-icon"></div>
+                    </td>
+                    <td><a href="<%= '/content/' + location + files[i].name %>"><%= files[i].name %></a></td>
                     <td><%= bytesToSize(files[i].properties.size) %></td>
                     <td><%= formatDate(files[i].properties.mtime) %></td>
-                <% }%>
-            </tr>
-            <% } %>
-        </table>
-        <% }%>
+                    <% }%>
+                </tr>
+                <% } %>
+            </table>
+            <% }%>
+        </main>
     </body>
 </html>

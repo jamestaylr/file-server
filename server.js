@@ -42,7 +42,7 @@ app.get('/content/*', function(req, res) {
 
     res.render('main', {
         'files': files,
-        'location': req.url.split('/').slice(2)
+        'location': req.url.split('/').slice(2).join().replace(/,/g, '/')
     });
 
 });
