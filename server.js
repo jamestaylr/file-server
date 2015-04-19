@@ -4,6 +4,7 @@ var fs = require("fs");
 
 // Dependency Library Imports
 var express = require('express');
+var multer = require('multer')
 
 // Defines the port the server will run on
 var port = 8080;
@@ -46,6 +47,25 @@ app.get('/content/*', function(req, res) {
     });
 
 });
+
+app.use(multer({
+    dest: './public/content/',
+    changeDest: function(dest, req, res) {
+        var relativeLocation = req.headers.referer.split('/').slice(4).join().replace(/,/g, '/');
+        dest += relativeLocation;
+        return dest;
+    },
+    rename: function(fieldname, filename) {
+        console.log(filename);
+        return filename;
+    }
+}));
+app.post('/upload', sendResponse);
+
+function sendResponse(req, res) {
+    res.send(200);
+};
+
 
 // Defines error handling
 app.use(function(req, res, next) {

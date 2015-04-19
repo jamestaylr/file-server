@@ -31,17 +31,22 @@ main {
     width: 20px;
     height: 20px;
     background-image: url(folder.svg);
+    padding-right: 10px;
+    background-repeat: no-repeat;
 }
 .file-icon {
     width: 20px;
     height: 20px;
     background-image: url(file.svg);
+    padding-right: 10px;
+    background-repeat: no-repeat;
 }
 .drive-icon {
     width: 20px;
     height: 20px;
     background-image: url(drive.svg);
     display: inline-block;
+    background-repeat: no-repeat;
 }
 .message {
     padding-top: 25px;
@@ -74,6 +79,10 @@ h1 a {
 h1 a:hover {
     border-bottom: 0;
     color: #C2CBCE;
+}
+h2 {
+    padding-top: 25px;
+    font-weight: 300;
 }
 a:hover {
     border-bottom: 2px solid #26ADE4;
