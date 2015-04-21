@@ -28,6 +28,7 @@ app.get('/', function(req, res) {
     res.redirect('/content');
 });
 
+// GET method for querying any folder or subfolder within content
 app.get('/content/*', function(req, res) {
     var dir = './public' + req.url;
 
@@ -55,6 +56,7 @@ app.get('/content/*', function(req, res) {
 
 });
 
+// Library that handles uploading the files to the server
 app.use(multer({
     dest: './public/content/',
     changeDest: function(dest, req, res) {
@@ -66,8 +68,11 @@ app.use(multer({
         return sanitize(filename).replace(/\s/g, '-');
     }
 }));
+
+// Defines the POST method for uploading a file to the server
 app.post('/upload', sendResponse);
 
+// Sends the 'OK' response from client request
 function sendResponse(req, res) {
     res.send(200);
 };
@@ -85,7 +90,7 @@ app.post('/create', function(req, res) {
 app.use(function(req, res, next) {
     res.status(404);
 
-    // respond with html page
+    // Respond with html page
     if (req.accepts('html')) {
         res.render('404', {
             url: req.url
@@ -93,7 +98,7 @@ app.use(function(req, res, next) {
         return;
     }
 
-    // respond with json
+    // Respond with JSON
     if (req.accepts('json')) {
         res.send({
             error: 'Not found'
@@ -101,7 +106,7 @@ app.use(function(req, res, next) {
         return;
     }
 
-    // default to plain-text. send()
+    // Default to plain-text
     res.type('txt').send('Not found');
 });
 
@@ -110,6 +115,7 @@ var server = app.listen(port, function() {
     console.log("Server successfully started at address: %s:%s!", server.address().address, server.address().port);
 });
 
+// Security measure used to ensure each file in the path request contains no bad characters
 function sanitizePath(path) {
 
     parts = path.split('/').slice(4);
@@ -123,6 +129,7 @@ function sanitizePath(path) {
     return parts.join().replace(/,/g, '/').replace(/\./g, '').replace(/\s/g, '-');
 }
 
+// Formats the file size into a more easily read String
 app.locals.bytesToSize = function(bytes) {
     var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
     if (bytes == 0) return '0 Bytes';
@@ -130,6 +137,7 @@ app.locals.bytesToSize = function(bytes) {
     return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
 };
 
+// Formats the date String into a more easily read String
 app.locals.formatDate = function(string) {
     var d = new Date(string);
     var weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
