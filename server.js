@@ -7,6 +7,7 @@ var express = require('express');
 var multer = require('multer');
 var bodyParser = require("body-parser");
 var mkdirp = require('mkdirp');
+var sanitize = require("sanitize-filename")
 
 // Defines the port the server will run on
 var port = 8080;
@@ -57,12 +58,12 @@ app.get('/content/*', function(req, res) {
 app.use(multer({
     dest: './public/content/',
     changeDest: function(dest, req, res) {
-        var relativeLocation = req.headers.referer.split('/').slice(4).join().replace(/,/g, '/');
-        dest += relativeLocation;
-        return dest;
+        // Strips control characters, preventing from escaping the directory
+        return dest += sanitizePath(req.headers.referer);
     },
     rename: function(fieldname, filename) {
-        return filename;
+        // Sanitizes the folder name, for security reasons
+        return sanitize(filename).replace(/\s/g, '-');
     }
 }));
 app.post('/upload', sendResponse);
@@ -72,7 +73,9 @@ function sendResponse(req, res) {
 };
 
 app.post('/create', function(req, res) {
-    mkdirp('./public/content/' + req.headers.referer.split('/').slice(4).join().replace(/,/g, '/') + req.body.folder, function(err) {
+
+    // Sanitizes the folder name, for security reasons
+    mkdirp('./public/content/' + sanitizePath(req.headers.referer) + sanitize(req.body.folder).replace(/\s/g, '-'), function(err) {
         if (err) console.error(err)
     });
     res.send(200);
@@ -107,6 +110,18 @@ var server = app.listen(port, function() {
     console.log("Server successfully started at address: %s:%s!", server.address().address, server.address().port);
 });
 
+function sanitizePath(path) {
+
+    parts = path.split('/').slice(4);
+
+    // Makes sure each part of the path is valid
+    for (var i = 0; i < parts; i++) {
+        parts[0] = sanitize(parts[0]);
+    }
+
+    // Strips control characters, preventing from escaping the directory
+    return parts.join().replace(/,/g, '/').replace(/\./g, '').replace(/\s/g, '-');
+}
 
 app.locals.bytesToSize = function(bytes) {
     var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
