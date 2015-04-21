@@ -49,8 +49,32 @@ app.get('/content/*', function(req, res) {
 
     }
 
+    folders = [];
+
+    // Iterates through the directory to find folders
+    for (var i = 0; i < files.length - l; i++) {
+        if(files[i].properties.nlink > 1) {
+            folders.push(files[i]);
+        } else if (files[i].name.charAt(0) == '.') {
+            // Removes hidden folders
+            files.splice(i, 1);
+        }
+    }
+
+    // Removes all the folders from the file array
+    for (var j = 0; j < folders.length; j++) {
+        var index = files.indexOf(folders[j]);
+        files.splice(index, 1);
+    }
+
+    // Adds the files to the folder array
+    for (var k = 0; k < files.length; k++) {
+        folders.push(files[k]);
+    }
+
+    // Renders the page, passing in the variable containing a list of all the files and folders in the directory
     res.render('main', {
-        'files': files,
+        'files': folders,
         'location': req.url.split('/').slice(2).join().replace(/,/g, '/')
     });
 
