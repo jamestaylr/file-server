@@ -52,7 +52,7 @@ app.get('/content/*', function(req, res) {
     folders = [];
 
     // Iterates through the directory to find folders
-    for (var i = 0; i < files.length - l; i++) {
+    for (var i = 0; i < files.length; i++) {
         if(files[i].properties.nlink > 1) {
             folders.push(files[i]);
         } else if (files[i].name.charAt(0) == '.') {
