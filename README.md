@@ -1,5 +1,7 @@
 # Raspberry Pi File Server
 
+[![GitHub license](https://img.shields.io/github/license/jamestaylr/file-server.svg)]()
+
 A file server prototype designed for the Raspberry Pi.
 
 <img src="http://i.imgur.com/pHbk12C.png" alt="Screenshot of file server" width="500px">
