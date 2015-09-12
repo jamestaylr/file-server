@@ -9,8 +9,6 @@ apt-get install git
 apt-get update
 apt-get upgrade
 
-echo 'pi:qLRVS5jAcua43RJw' | chpasswd # Set the password of the Pi to a randomly generated String
-
 # Install Node JS
 wget http://node-arm.herokuapp.com/node_latest_armhf.deb
 sudo dpkg -i node_latest_armhf.deb
